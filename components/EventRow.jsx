@@ -3,7 +3,7 @@ import Image from "next/image";
 import more from "../public/assets/more.png";
 import Dropdown from "./Dropdown";
 
-const EventRow = ({ title, status, amount, targetPrice, _id: id, clickHandy, active }) => {
+const EventRow = ({ title, status, amount, targetPrice, _id: id, clickHandy, active, deleteId }) => {
     return (
         <div className="grid grid-cols-4 py-4 w-full lg:w-3/5 text-center relative hover:bg-[#d9d9d916]">
             <div>{title}</div>
@@ -26,7 +26,7 @@ const EventRow = ({ title, status, amount, targetPrice, _id: id, clickHandy, act
                     alt=""
                 />
             </div>
-            {active===id && <Dropdown id={id} />}
+            {active===id && <Dropdown id={id} deleteId={deleteId}/>}
         </div>
     );
 };
