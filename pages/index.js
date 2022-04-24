@@ -19,6 +19,10 @@ export default function Home({ profile, events }) {
             <div>
                 <Head>
                     <title>Assignment</title>
+                    <meta
+                        httpEquiv="Content-Security-Policy"
+                        content="upgrade-insecure-requests"
+                    ></meta>
                 </Head>
                 <Table data={data} />
             </div>
