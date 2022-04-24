@@ -8,7 +8,10 @@ const Table = ({ data }) => {
     let rows;
 
     const clickHandler = (id) => {
-        setActive(id);
+        if(id === active)
+            setActive("");
+        else
+            setActive(id);
     };
 
     if (events) {

@@ -4,9 +4,8 @@ import more from "../public/assets/more.png";
 import Dropdown from "./Dropdown";
 
 const EventRow = ({ title, status, amount, targetPrice, _id: id, clickHandy, active }) => {
-    const [showDropdown, setShowDropdown] = useState(false);
     return (
-        <div className="grid grid-cols-4 py-4 w-3/5 text-center relative hover:bg-[#d9d9d916]">
+        <div className="grid grid-cols-4 py-4 w-full lg:w-3/5 text-center relative hover:bg-[#d9d9d916]">
             <div>{title}</div>
             <div>
                 <span className="bg-[#cafac9] py-1 px-2 rounded-md">
