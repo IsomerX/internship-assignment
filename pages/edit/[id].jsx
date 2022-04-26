@@ -6,13 +6,14 @@ const Editing = ({ id }) => {
     const [status, setStatus] = useState("");
     const [category,setCategory] = useState("");
     const [city, setCity] = useState("");
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     console.log(status);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setLoading(true);
         var myHeaders = new Headers();
         myHeaders.append(
             "Authorization",
@@ -37,6 +38,7 @@ const Editing = ({ id }) => {
             requestOptions
         )
             .then((response) => {
+                setLoading(false);
                 if (response.ok) {
                     router.push("/");
                 }
@@ -46,7 +48,9 @@ const Editing = ({ id }) => {
             .catch((error) => console.log("error", error));
     };
 
-    return (
+
+    return (<div>
+        {loading && <Loading />}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
             <h1 className="text-3xl font-medium py-10">Editing: {id}</h1>
             <form className="flex flex-col text-left text-3xl gap-4">
@@ -77,11 +81,12 @@ const Editing = ({ id }) => {
                 <button
                     className="mt-10 bg-green-500 py-3 text-white"
                     onClick={handleSubmit}
-                >
+                    >
                     Submit
                 </button>
             </form>
         </div>
+                    </div>
     );
 };
 
