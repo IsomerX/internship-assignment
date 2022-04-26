@@ -1,37 +1,49 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Loading from "../../components/Loading";
 
 const Editing = ({ id }) => {
-    const status = useRef();
-    const category = useRef();
-    const city = useRef();
+    const [status, setStatus] = useState("");
+    const [category,setCategory] = useState("");
+    const [city, setCity] = useState("");
     const router = useRouter();
+
+    console.log(status);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let data = {};
-        if (status.current.value) data["status"] = status.current.value;
-        if (category.current.value) data["category"] = category.current.value;
-        if (city.current.value) data["city"] = city.current.value;
 
-        let response = await fetch(
-            `http://hiring-tests.herokuapp.com/editEvent/${id}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    Authorization:
-                        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzAxNjU4ZTUzYTdhZTUzOWU1MDIzZiIsImVtYWlsIjoieXByaXR3YW5pQGdtYWlsLmNvbSIsImlhdCI6MTY0NzMxOTU2MiwiZXhwIjozMjk5ODIzMTI0fQ.8Q2A1gGoEkRTJ6kgDUZNA7sM2b7x44lGqrscy3UheNE",
-                },
-                body: {
-                    event: data,
-                },
-            }
+        var myHeaders = new Headers();
+        myHeaders.append(
+            "Authorization",
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzAxNjU4ZTUzYTdhZTUzOWU1MDIzZiIsImVtYWlsIjoieXByaXR3YW5pQGdtYWlsLmNvbSIsImlhdCI6MTY0NzMxOTU2MiwiZXhwIjozMjk5ODIzMTI0fQ.8Q2A1gGoEkRTJ6kgDUZNA7sM2b7x44lGqrscy3UheNE"
         );
-        if (response.ok) {
-            router.push("/");
-        }
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        var urlencoded = new URLSearchParams();
+        urlencoded.append("status", status);
+        urlencoded.append("category", category);
+        urlencoded.append("city", city);
+
+        var requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: "follow",
+        };
+
+        fetch(
+            `http://hiring-tests.herokuapp.com/editEvent/${id}`,
+            requestOptions
+        )
+            .then((response) => {
+                if (response.ok) {
+                    router.push("/");
+                }
+                return response.text();
+            })
+            .then((result) => console.log(result))
+            .catch((error) => console.log("error", error));
     };
 
     return (
@@ -44,7 +56,7 @@ const Editing = ({ id }) => {
                 <input
                     name="Status"
                     className="border-gray-300 border-b-2"
-                    ref={status}
+                    onChange={(e) => setStatus(e.target.value)}
                 />
                 <label htmlFor="Category" className="font-medium">
                     Category
@@ -52,7 +64,7 @@ const Editing = ({ id }) => {
                 <input
                     name="Category"
                     className="border-gray-300 border-b-2"
-                    ref={category}
+                    onChange={(e) => setCategory(e.target.value)}
                 />
                 <label htmlFor="City" className="font-medium">
                     City
@@ -60,7 +72,7 @@ const Editing = ({ id }) => {
                 <input
                     name="City"
                     className="border-gray-300 border-b-2"
-                    ref={city}
+                    onChange={(e) => setCity(e.target.value)}
                 />
                 <button
                     className="mt-10 bg-green-500 py-3 text-white"
@@ -78,7 +90,7 @@ export default Editing;
 export const getServerSideProps = async ({ params }) => {
     return {
         props: {
-            id: params.id
+            id: params.id,
         },
     };
 };
